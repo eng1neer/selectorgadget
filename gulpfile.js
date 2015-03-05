@@ -114,8 +114,6 @@ gulp.task('publish', function (end) {
     .pipe(git.add({ args: '-u' }))
     // Commit the changed version number.
     .pipe(git.commit(message))
-    // Read only one file to get the version number.
-    .pipe(filter('package.json'))
     // Tag it to the repository. 
     .pipe(git.tag(tag(), message, function(err) {
       if (err) throw err;
