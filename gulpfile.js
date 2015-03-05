@@ -29,6 +29,7 @@ var fs          = require('fs')
 function refreshPackage(next) {
   pkg = JSON.parse(fs.readFileSync('./package.json'));
   next && next();
+  return pkg;
 }
 
 /**
@@ -91,13 +92,13 @@ function bumper(importance, end) {
  * Creates a new release.
  */
 function release(version, end) {
-  sequence(version, 'build', 'publish', end);
+  sequence(version, 'build', 'tag', 'publish', end);
 }
 
 /**
- * Commits files and publishes a new release.
+ * Commits files and creates a new tag.
  */
-gulp.task('publish', function () {
+gulp.task('tag', function () {
   return gulp.src('./*')
     .pipe(ignore.include(gitignore))
     // Add all files.
@@ -108,6 +109,14 @@ gulp.task('publish', function () {
     .pipe(filter('package.json'))
     // Tag it to the repository. 
     .pipe(tag())
+});
+
+/**
+ * Pushes the new tag.
+ */
+gulp.task('publish', function (end) {
+  var version = 'v' + (refreshPackage()).version;
+  git.push('origin', version, end);
 });
 
 // Versioning tags.
