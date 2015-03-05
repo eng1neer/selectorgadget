@@ -16,7 +16,6 @@ var fs          = require('fs')
   , git         = require('gulp-git')
   , bump        = require('gulp-bump')
   , filter      = require('gulp-filter')
-  , tag         = require('gulp-tag-version')
   , sequence    = require('run-sequence')
   , signature   = fs.readFileSync('./signature')
   , gitignore   = fs.existsSync('.gitignore') ? fs.readFileSync('.gitignore') + '' : ''
@@ -30,6 +29,13 @@ function refreshPackage(next) {
   pkg = JSON.parse(fs.readFileSync('./package.json'));
   next && next();
   return pkg;
+}
+
+/**
+ * Get a tag version from package json.
+ */
+function tag() {
+  return 'v' + (refreshPackage()).version;
 }
 
 /**
@@ -92,31 +98,29 @@ function bumper(importance, end) {
  * Creates a new release.
  */
 function release(version, end) {
-  sequence(version, 'build', 'tag', 'publish', end);
+  sequence(version, 'build', 'publish', end);
 }
 
 /**
  * Commits files and creates a new tag.
  */
-gulp.task('tag', function () {
-  return gulp.src('./*')
+gulp.task('publish', function (end) {
+  var newTag = tag()
+    , message = 'Created release ' + newTag;
+
+  gulp.src('./*')
     .pipe(ignore.include(gitignore))
     // Add all files.
     .pipe(git.add({ args: '-u' }))
     // Commit the changed version number.
-    .pipe(git.commit('Created release v' + pkg.version))
+    .pipe(git.commit(message))
     // Read only one file to get the version number.
     .pipe(filter('package.json'))
     // Tag it to the repository. 
-    .pipe(tag())
-});
-
-/**
- * Pushes the new tag.
- */
-gulp.task('publish', function (end) {
-  var version = 'v' + (refreshPackage()).version;
-  git.push('origin', version, end);
+    .pipe(git.tag(tag(), message, function(err) {
+      if (err) throw err;
+      git.push('origin', newTag, end);
+    }));
 });
 
 // Versioning tags.
