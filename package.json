@@ -31,6 +31,7 @@
     "gulp": "^3.8.10",
     "gulp-bump": "^0.2.2",
     "gulp-concat": "^2.5.2",
+    "gulp-ignore": "^1.2.1",
     "gulp-filter": "^2.0.2",
     "gulp-git": "^1.0.1",
     "gulp-header": "^1.2.2",
@@ -43,7 +44,7 @@
   },
   "dependencies": {
     "coffee-script": "1.x.x",
-    "jquery": "1.x.x",
-    "google-diff-match-patch-js": "TallerWebSolutions/google-diff-match-patch-js#master"
+    "google-diff-match-patch-js": "TallerWebSolutions/google-diff-match-patch-js#master",
+    "jquery": "1.x.x"
   }
 }
