@@ -1,7 +1,7 @@
 /**
  * SelectorGadget - [SelectorGadget](http://www.selectorgadget.com) is an open source bookmarklet that makes CSS selector generation and discovery on complicated sites a breeze.
  * @name selectorgadget
- * @version v1.0.1
+ * @version v1.1.0
  * @link https://github.com/jardix22/selectorgadget
  * @license MIT
  */
@@ -288,10 +288,8 @@ SelectorGadget.prototype.sgMousedown = function(e) {
     gadget.blockClicksOn(elem);
     return false;
   }
-
   if (w_elem.hasClass('selectorgadget_selected')) {
     w_elem.removeClass('selectorgadget_selected');
-
     if (gadget.individualMatch) {
       gadget.individualSelectors.splice(jQuerySG.inArray(elem, gadget.selected), 1);
     }
@@ -305,7 +303,6 @@ SelectorGadget.prototype.sgMousedown = function(e) {
   } else {
     w_elem.addClass('selectorgadget_selected');
     gadget.selected.push(elem);
-
     if (gadget.individualMatch) {
       var inPrediction = gadget.individualMatchPredict(elem);
       gadget.individualSelectors.push(inPrediction);
