@@ -758,7 +758,7 @@ module.exports = DomPredictionHelper = (function() {
     if (escaped && escaped.length > 0) {
       path += '#' + escaped;
     }
-    if (node.className) {
+    if (node.className && typeof node.className === 'string' && node.className !== '') {
       ref = node.className.split(" ");
       for (k = 0, len = ref.length; k < len; k++) {
         cssName = ref[k];

@@ -60,7 +60,7 @@ module.exports = class DomPredictionHelper
     escaped = node.id && @escapeCssNames(new String(node.id))
     path += '#' + escaped if escaped && escaped.length > 0
 
-    if node.className
+    if node.className and typeof node.className == 'string' and node.className != ''
       for cssName in node.className.split(" ")
         escaped = @escapeCssNames(cssName)
         if cssName && escaped.length > 0
